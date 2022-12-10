@@ -1,6 +1,5 @@
-package com.cloud.common.controller;
+package com.cloud.common.service;
 
-import com.cloud.common.dto.FileDTO;
 import com.cloud.common.openfeign.KakaoAccessClient;
 import com.cloud.common.openfeign.KakaoStorageClient;
 import feign.Response;
@@ -9,17 +8,19 @@ import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.*;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
-
 @Log4j2
-@RestController
-@RequestMapping(value="v1/common/file")
+@Service
 @RequiredArgsConstructor
-public class FileController {
+public class FileUploadService {
     private final KakaoStorageClient kakaoStorageClient;
     private final KakaoAccessClient kakaoAccessClient;
 
@@ -35,10 +36,8 @@ public class FileController {
     @Value("${kakao.storage.bucketName}")
     String bucketName;
 
-    @PostMapping("/upload/{folder}")
-    public String uploadFile(
-            @RequestParam MultipartFile multipartFile,
-            @PathVariable String folder) throws IllegalStateException, IOException {
+    public String uploadFile(MultipartFile multipartFile, String folder)
+            throws IllegalStateException, IOException {
 
         // 파일 이름 생성하기 (uuid.확장자)
         String originalName = multipartFile.getOriginalFilename();
@@ -71,7 +70,6 @@ public class FileController {
         Response accessToken = kakaoAccessClient.getAccessToken(jsonObject);
         return accessToken.headers().get("x-subject-token").toString();
     }
-
 
 
 }

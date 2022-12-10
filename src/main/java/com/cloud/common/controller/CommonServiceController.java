@@ -7,11 +7,14 @@ import com.cloud.common.entity.UserAge;
 import com.cloud.common.entity.UserJob;
 import com.cloud.common.repository.UserAgeRepository;
 import com.cloud.common.service.CommonService;
+import com.cloud.common.service.FileUploadService;
 import com.cloud.common.service.kafka.producer.KafkaProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +25,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CommonServiceController {
     private final CommonService commonService;
-    private final KafkaProducer producer;
+    private final KafkaProducer kafkaProducer;
+    private final FileUploadService fileUploadService;
 
     @GetMapping("/test")
     public String test() {
@@ -49,10 +53,19 @@ public class CommonServiceController {
 
     @PostMapping("/kafkaConnTest")
     public String sendMessage(@RequestParam("message") String message) {
-        this.producer.sendMessage(message);
+        this.kafkaProducer.sendMessage(message);
 
         return "success";
     }
+
+    @PostMapping("/upload/{folder}")
+    public String uploadFile(
+            @RequestParam MultipartFile multipartFile,
+            @PathVariable String folder) throws IllegalStateException, IOException {
+        return fileUploadService.uploadFile(multipartFile, folder);
+    }
+
+
 
     @GetMapping("/questionType")
     public List<QuestionType> getQuestionTypeList() {

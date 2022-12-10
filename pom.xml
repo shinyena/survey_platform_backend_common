@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2021.0.4</spring-cloud.version>
+		<docker.image.prefix>survey</docker.image.prefix>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -104,6 +105,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<name>${docker.image.prefix}/${project.artifactId}:latest</name>
+					</image>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

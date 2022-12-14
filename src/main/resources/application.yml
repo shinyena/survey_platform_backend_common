@@ -49,7 +49,7 @@ keycloak:
 #  auth-server-url: http://localhost:5010/
   credentials:
     secret: AvgjtsAvqQUNfo9DemEpANjMt3YrAtbt
-
+# test
 eureka:
   instance:
     instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}

@@ -8,8 +8,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class FileDTO {
-    private String orgName;
-    private String fileName;
-    private String contentType;
-    private Integer fileSize;
+    private String originalName;
+    private byte[] fileBytes;
 }

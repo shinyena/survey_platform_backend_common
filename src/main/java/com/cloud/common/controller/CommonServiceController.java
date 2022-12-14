@@ -1,5 +1,6 @@
 package com.cloud.common.controller;
 
+import com.cloud.common.dto.FileDTO;
 import com.cloud.common.dto.MenuDTO;
 import com.cloud.common.entity.QuestionType;
 import com.cloud.common.entity.SurveyState;
@@ -60,9 +61,9 @@ public class CommonServiceController {
 
     @PostMapping("/upload/{folder}")
     public String uploadFile(
-            @RequestParam MultipartFile multipartFile,
+            @RequestBody FileDTO fileDTO,
             @PathVariable String folder) throws IllegalStateException, IOException {
-        return fileUploadService.uploadFile(multipartFile, folder);
+        return fileUploadService.uploadFile(fileDTO, folder);
     }
 
 

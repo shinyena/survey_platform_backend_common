@@ -1,5 +1,6 @@
 package com.cloud.common.service;
 
+import com.cloud.common.dto.FileDTO;
 import com.cloud.common.openfeign.KakaoAccessClient;
 import com.cloud.common.openfeign.KakaoStorageClient;
 import feign.Response;
@@ -36,17 +37,17 @@ public class FileUploadService {
     @Value("${kakao.storage.bucketName}")
     String bucketName;
 
-    public String uploadFile(MultipartFile multipartFile, String folder)
+    public String uploadFile(FileDTO fileDTO, String folder)
             throws IllegalStateException, IOException {
 
         // 파일 이름 생성하기 (uuid.확장자)
-        String originalName = multipartFile.getOriginalFilename();
+        String originalName = fileDTO.getOriginalName();
         String fileUuid = UUID.randomUUID().toString();
         String fileExt = originalName.substring(originalName.lastIndexOf("."));
         String fileName = fileUuid + fileExt;
 
         // 파일 업로드
-        Response response = kakaoStorageClient.fileUpload(getAuthToken(), account, bucketName, folder, fileName, multipartFile.getBytes());
+        Response response = kakaoStorageClient.fileUpload(getAuthToken(), account, bucketName, folder, fileName, fileDTO.getFileBytes());
 
         if (response.status() == 201 ) {
             return "https://objectstorage.kr-central-1.kakaoi.io/v1/" + account + "/" + bucketName + "/" + folder + File.separator + fileName;

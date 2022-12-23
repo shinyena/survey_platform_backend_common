@@ -1,4 +1,4 @@
-#Common Service
+# Common Service
 |Method|API|Description|
 |---|---|---|
 |GET|/common-service/v1/common/menu|플랫폼 메뉴 조회|
